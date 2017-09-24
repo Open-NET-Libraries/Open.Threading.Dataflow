@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageLicenseUrl>https://github.com/electricessence/Open/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>Useful set of extensions and classes for simplifying Dataflow implementations.
+
+Part of the "Open" set of libraries.</Description>
+    <Authors>electricesssence</Authors>
+    <Company />
+    <Product />
+  </PropertyGroup>
+
+</Project>
