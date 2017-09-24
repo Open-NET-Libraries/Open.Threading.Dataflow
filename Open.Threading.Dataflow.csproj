@@ -3,13 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageLicenseUrl>https://github.com/electricessence/Open/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/electricessence/Open.Threading.Dataflow/blob/master/LISCENSE.md</PackageLicenseUrl>
     <Description>Useful set of extensions and classes for simplifying Dataflow implementations.
 
 Part of the "Open" set of libraries.</Description>
     <Authors>electricesssence</Authors>
     <Company />
     <Product />
+    <Copyright>https://github.com/electricessence/Open.Threading.Dataflow/blob/master/LISCENSE.md</Copyright>
+    <PackageProjectUrl>https://github.com/electricessence/Open.Threading.Dataflow/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/electricessence/Open.Threading.Dataflow/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>dotnet, dotnet-core, dotnetcore, cs, dataflow, tpl, extensions</PackageTags>
   </PropertyGroup>
 
 </Project>
