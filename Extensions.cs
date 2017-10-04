@@ -218,18 +218,18 @@ namespace Open.Dataflow
 
 			public void OnNext(T value)
 			{
-				if (_onNext != null) _onNext(value);
-			}
+                _onNext?.Invoke(value);
+            }
 
 			public void OnError(Exception error)
 			{
-				if (_onError != null) _onError(error);
-			}
+                _onError?.Invoke(error);
+            }
 
 			public void OnCompleted()
 			{
-				if (_onCompleted != null) _onCompleted();
-			}
+                _onCompleted?.Invoke();
+            }
 
 
 			public void Dispose()

@@ -17,4 +17,8 @@ Part of the "Open" set of libraries.</Description>
     <PackageTags>dotnet, dotnet-core, dotnetcore, cs, dataflow, tpl, extensions</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Open.Threading" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>
