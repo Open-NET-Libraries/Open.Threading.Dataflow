@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Open.Threading;
+using Open.Threading.Tasks;
 
 namespace System.Threading.Tasks.Dataflow
 {
