@@ -15,6 +15,7 @@ Part of the "Open" set of libraries.</Description>
     <RepositoryUrl>https://github.com/electricessence/Open.Threading.Dataflow/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>dotnet, dotnet-core, dotnetcore, cs, dataflow, tpl, extensions</PackageTags>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
