@@ -1,8 +1,8 @@
+﻿using Open.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Open.Threading.Tasks;
 
 namespace System.Threading.Tasks.Dataflow
 {
@@ -218,18 +218,18 @@ namespace Open.Dataflow
 
 			public void OnNext(T value)
 			{
-                _onNext?.Invoke(value);
-            }
+				_onNext?.Invoke(value);
+			}
 
 			public void OnError(Exception error)
 			{
-                _onError?.Invoke(error);
-            }
+				_onError?.Invoke(error);
+			}
 
 			public void OnCompleted()
 			{
-                _onCompleted?.Invoke();
-            }
+				_onCompleted?.Invoke();
+			}
 
 
 			public void Dispose()

@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace Open.Dataflow
 {
 
-    internal abstract class TargetBlockFilter<T> : ITargetBlock<T>
+	internal abstract class TargetBlockFilter<T> : ITargetBlock<T>
 	{
 		protected readonly ITargetBlock<T> _target;
 

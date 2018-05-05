@@ -1,10 +1,10 @@
+﻿using Open.Threading;
 using System.Threading.Tasks.Dataflow;
-using Open.Threading;
 
 namespace Open.Dataflow
 {
 
-    internal class AutoCompleteFilter<T> : TargetBlockFilter<T>
+	internal class AutoCompleteFilter<T> : TargetBlockFilter<T>
 	{
 		public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target)
 		{

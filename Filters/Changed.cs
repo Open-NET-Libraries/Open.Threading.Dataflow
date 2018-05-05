@@ -1,9 +1,9 @@
+﻿using Open.Threading;
 using System.Threading.Tasks.Dataflow;
-using Open.Threading;
 
 namespace Open.Dataflow
 {
-    internal class ChangedFilter<T> : TargetBlockFilter<T>
+	internal class ChangedFilter<T> : TargetBlockFilter<T>
 	{
 		readonly DataflowMessageStatus _defaultResponseForDuplicate;
 

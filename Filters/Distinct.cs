@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks.Dataflow;
 
 namespace Open.Dataflow
 {
 
-    internal class DistinctFilter<T> : TargetBlockFilter<T>
+	internal class DistinctFilter<T> : TargetBlockFilter<T>
 	{
 		private readonly DataflowMessageStatus _defaultResponseForDuplicate;
 
