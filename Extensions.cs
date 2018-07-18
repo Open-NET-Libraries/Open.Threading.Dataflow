@@ -156,6 +156,7 @@ namespace Open.Dataflow
 				foreach (var target in targets.Where(t => t != null))
 				{
 					if (task.IsFaulted)
+						// ReSharper disable once PossibleNullReferenceException
 						target.Fault(task.Exception.InnerException);
 					else
 						target.Complete();

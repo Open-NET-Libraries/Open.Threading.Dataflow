@@ -9,18 +9,12 @@ namespace Open.Dataflow
 	{
 		protected readonly ITargetBlock<T> _target;
 
-		public TargetBlockFilter(ITargetBlock<T> target)
+		protected TargetBlockFilter(ITargetBlock<T> target)
 		{
 			_target = target;
 		}
 
-		public Task Completion
-		{
-			get
-			{
-				return _target.Completion;
-			}
-		}
+		public Task Completion => _target.Completion;
 
 		public void Complete()
 		{
