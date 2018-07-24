@@ -8,21 +8,11 @@ namespace Open.Dataflow
 	{
 		public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target)
 		{
-			_limit = limit;
+			Limit = limit;
 		}
 
-		private readonly int _limit;
-		public int Limit
-		{
-			get { return _limit; }
-		}
-
-		private int _allowed = 0;
-		public int AllowedCount
-		{
-			get { return _allowed; }
-		}
-
+		public int Limit { get; }
+		public int AllowedCount { get; private set; }
 
 
 		// The key here is to reject the message ahead of time.
@@ -32,12 +22,12 @@ namespace Open.Dataflow
 			var completed = false;
 			// There are multiple operations happening here that require synchronization to get right.
 			ThreadSafety.LockConditional(_target,
-				() => _allowed < _limit,
+				() => AllowedCount < Limit,
 				() =>
 				{
-					_allowed++;
+					AllowedCount++;
 					result = _target.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
-					completed = _allowed == _limit;
+					completed = AllowedCount == Limit;
 				}
 			);
 
