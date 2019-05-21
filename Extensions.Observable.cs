@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
     public static partial class DataFlowExtensions
     {

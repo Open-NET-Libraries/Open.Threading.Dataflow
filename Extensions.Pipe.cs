@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
     public static partial class DataFlowExtensions
     {
@@ -74,6 +74,7 @@ namespace Open.Dataflow
             var receiver = options == null
                 ? new ActionBlock<T>(handler)
                 : new ActionBlock<T>(handler, options);
+
             source.LinkToWithCompletion(receiver);
             return receiver;
         }
@@ -113,7 +114,7 @@ namespace Open.Dataflow
         /// <param name="handler">The handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> Parallel<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> PipeConcurrently<T>(this ISourceBlock<T> source,
             int maxConcurrency,
             Action<T> handler,
             CancellationToken cancellationToken = default)
@@ -133,7 +134,7 @@ namespace Open.Dataflow
         /// <param name="handler">The async handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> ParallelAsync<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> PipeConcurrentlyAsync<T>(this ISourceBlock<T> source,
             int maxConcurrency,
             Func<T, Task> handler,
             CancellationToken cancellationToken = default)
@@ -154,7 +155,7 @@ namespace Open.Dataflow
         /// <param name="transform">The transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> Parallel<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> PipeConcurrently<TIn, TOut>(this ISourceBlock<TIn> source,
             int maxConcurrency,
             Func<TIn, TOut> transform,
             CancellationToken cancellationToken = default)
@@ -175,7 +176,7 @@ namespace Open.Dataflow
         /// <param name="transform">The async transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> ParallelAsync<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> PipeConcurrentlyAsync<TIn, TOut>(this ISourceBlock<TIn> source,
             int maxConcurrency,
             Func<TIn, Task<TOut>> transform,
             CancellationToken cancellationToken = default)
@@ -196,7 +197,7 @@ namespace Open.Dataflow
         /// <param name="handler">The handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> BoundedParallel<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> Pipe<T>(this ISourceBlock<T> source,
             int capacity,
             int maxConcurrency,
             Action<T> handler,
@@ -219,7 +220,7 @@ namespace Open.Dataflow
         /// <param name="handler">The async handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> BoundedParallelAsync<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> PipeAsync<T>(this ISourceBlock<T> source,
             int capacity,
             int maxConcurrency,
             Func<T, Task> handler,
@@ -243,7 +244,7 @@ namespace Open.Dataflow
         /// <param name="transform">The transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> BoundedParallel<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> Pipe<TIn, TOut>(this ISourceBlock<TIn> source,
             int capacity,
             int maxConcurrency,
             Func<TIn, TOut> transform,
@@ -268,7 +269,7 @@ namespace Open.Dataflow
         /// <param name="transform">The async transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> BoundedParallelAsync<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> PipeAsync<TIn, TOut>(this ISourceBlock<TIn> source,
             int capacity,
             int maxConcurrency,
             Func<TIn, Task<TOut>> transform,
@@ -290,7 +291,7 @@ namespace Open.Dataflow
         /// <param name="handler">The handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> Bounded<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> PipeLimited<T>(this ISourceBlock<T> source,
             int capacity,
             Action<T> handler,
             CancellationToken cancellationToken = default)
@@ -310,7 +311,7 @@ namespace Open.Dataflow
         /// <param name="handler">The async handler function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The ActionBlock created.</returns>
-        public static ActionBlock<T> Bounded<T>(this ISourceBlock<T> source,
+        public static ActionBlock<T> PipeLimitedAsync<T>(this ISourceBlock<T> source,
             int capacity,
             Func<T, Task> handler,
             CancellationToken cancellationToken = default)
@@ -331,7 +332,7 @@ namespace Open.Dataflow
         /// <param name="transform">The transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> Bounded<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> PipeLimited<TIn, TOut>(this ISourceBlock<TIn> source,
             int capacity,
             Func<TIn, TOut> transform,
             CancellationToken cancellationToken = default)
@@ -352,7 +353,7 @@ namespace Open.Dataflow
         /// <param name="transform">The async transform function to apply.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns>The TransformBlock created.</returns>
-        public static IReceivableSourceBlock<TOut> Bounded<TIn, TOut>(this ISourceBlock<TIn> source,
+        public static IReceivableSourceBlock<TOut> PipeLimitedAsync<TIn, TOut>(this ISourceBlock<TIn> source,
             int capacity,
             Func<TIn, Task<TOut>> transform,
             CancellationToken cancellationToken = default)

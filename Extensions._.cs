@@ -7,10 +7,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
     public static partial class DataFlowExtensions
     {
+        public static Task CompleteAsync(this IDataflowBlock source)
+        {
+            source.Complete();
+            return source.Completion;                                                                   
+        }
+
         public static ISourceBlock<T> Buffer<T>(this ISourceBlock<T> source, DataflowBlockOptions dataflowBlockOptions = null)
         {
             if (source == null)
@@ -105,7 +111,7 @@ namespace Open.Dataflow
         public static async Task<List<T>> ToListAsync<T>(this IReceivableSourceBlock<T> source)
         {
             if (source == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException();           
             Contract.EndContractBlock();
 
             var result = new List<T>();
@@ -156,7 +162,8 @@ namespace Open.Dataflow
         }
 
         public static async Task<int> AllLinesTo(this TextReader source,
-            ITargetBlock<string> target)
+            ITargetBlock<string> target,
+            bool completeAndWait = false)
         {
             if (source == null)
                 throw new NullReferenceException();
@@ -171,12 +178,17 @@ namespace Open.Dataflow
 
                 count++;
             }
+
+            if (completeAndWait)
+                await target.CompleteAsync();
+
             return count;
-        }
+        }      
 
         public static async Task<int> AllLinesTo<T>(this TextReader source,
             ITargetBlock<T> target,
-            Func<string, T> transform)
+            Func<string, T> transform,
+            bool completeAndWait = false)
         {
             if (source == null)
                 throw new NullReferenceException();
@@ -193,6 +205,9 @@ namespace Open.Dataflow
                 count++;
             }
 
+            if (completeAndWait)
+                await target.CompleteAsync();
+
             return count;
         }
 
@@ -201,7 +216,7 @@ namespace Open.Dataflow
         {
             source.Completion.ContinueWith(task => oncomplete());
             return source;
-        }
+        }                                                                                
 
         public static T OnComplete<T>(this T source, Action<Task> oncomplete)
             where T : IDataflowBlock
@@ -210,10 +225,17 @@ namespace Open.Dataflow
             return source;
         }
 
+        public static T OnCompletedSuccessfully<T>(this T source, Action oncomplete)
+            where T : IDataflowBlock
+        {       
+            source.Completion.OnFullfilled(oncomplete);
+            return source;
+        }
+
         public static T OnFault<T>(this T source, Action<Exception> onfault)
             where T : IDataflowBlock
         {
-            source.Completion.OnFaulted(task => onfault(task.InnerException));
+            source.Completion.OnFaulted(ex => onfault(ex.InnerException));
             return source;
         }
 
@@ -225,3 +247,4 @@ namespace Open.Dataflow
 
     }
 }
+                                                                                                                            

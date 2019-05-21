@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
     public static partial class DataFlowExtensions
     {

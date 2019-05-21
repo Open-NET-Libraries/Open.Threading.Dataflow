@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
-
 	internal abstract class TargetBlockFilter<T> : ITargetBlock<T>
 	{
 		protected readonly ITargetBlock<T> _target;

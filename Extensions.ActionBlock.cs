@@ -1,4 +1,8 @@
-﻿namespace System.Threading.Tasks.Dataflow
+﻿using System;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+
+namespace Open.Threading.Dataflow
 {
     public static class ActionBlock
     {

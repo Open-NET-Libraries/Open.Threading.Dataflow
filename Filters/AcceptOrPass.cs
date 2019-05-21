@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
     internal sealed class AcceptOrPassBlock<T> : ITargetBlock<T>
     {

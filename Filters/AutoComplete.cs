@@ -1,7 +1,7 @@
 ﻿using Open.Threading;
 using System.Threading.Tasks.Dataflow;
 
-namespace Open.Dataflow
+namespace Open.Threading.Dataflow
 {
 
 	internal class AutoCompleteFilter<T> : TargetBlockFilter<T>
