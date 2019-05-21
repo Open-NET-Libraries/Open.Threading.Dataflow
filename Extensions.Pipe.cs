@@ -10,6 +10,28 @@ namespace Open.Threading.Dataflow
     public static partial class DataFlowExtensions
     {
         /// <summary>
+        /// Pipes the source data to the target.
+        /// </summary>
+        /// <typeparam name="T">The input type.</typeparam>
+        /// <param name="source">The source block to receive from.</param>
+        /// <param name="transform">The target block to post to.</param>
+        /// <returns>The target block.</returns>
+        public static TBlock Pipe<T, TBlock>(this ISourceBlock<T> source,
+            TBlock target)
+            where TBlock : ITargetBlock<T>
+        {
+            if (source == null)
+                throw new NullReferenceException();
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            Contract.EndContractBlock();
+
+            source.LinkToWithCompletion(target);
+            return target;
+        }
+
+
+        /// <summary>
         /// Produces a source block that contains transformed results.
         /// </summary>
         /// <typeparam name="T">The input type.</typeparam>

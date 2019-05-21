@@ -52,7 +52,7 @@ namespace Open.Threading.Dataflow
         /// <param name="source">The source block to receive from.</param>
         /// <param name="acceptor">The function to process the item and decide if accepted.</param>
         /// <returns>The original source block to allow for more acceptors or filters to be applied.</returns>
-        public static ISourceBlock<T> AcceptOrPass<T>(this ISourceBlock<T> source,
+        public static ISourceBlock<T> TakeOrContinue<T>(this ISourceBlock<T> source,
             Func<T, bool> acceptor)
         {
             var receiver = new AcceptOrPassBlock<T>(acceptor);
