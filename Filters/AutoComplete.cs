@@ -37,4 +37,10 @@ namespace Open.Dataflow
 		}
 	}
 
+    public static partial class DataFlowExtensions
+    {
+        public static ITargetBlock<T> AutoCompleteAfter<T>(this ITargetBlock<T> target, int limit)
+            => new AutoCompleteFilter<T>(limit, target);
+    }
+
 }

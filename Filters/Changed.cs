@@ -25,4 +25,10 @@ namespace Open.Dataflow
 				: _defaultResponseForDuplicate;
 		}
 	}
+
+    public static partial class DataFlowExtensions
+    {
+        public static ITargetBlock<T> OnlyIfChanged<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
+            => new ChangedFilter<T>(defaultResponseForDuplicate, target);
+    }
 }

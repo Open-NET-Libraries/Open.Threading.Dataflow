@@ -3,7 +3,6 @@ using System.Threading.Tasks.Dataflow;
 
 namespace Open.Dataflow
 {
-
 	internal class DistinctFilter<T> : TargetBlockFilter<T>
 	{
 		private readonly DataflowMessageStatus _defaultResponseForDuplicate;
@@ -27,5 +26,11 @@ namespace Open.Dataflow
 			return _defaultResponseForDuplicate;
 		}
 	}
+
+    public static partial class DataFlowExtensions
+    {
+        public static ITargetBlock<T> Distinct<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
+            => new DistinctFilter<T>(defaultResponseForDuplicate, target);
+    }
 
 }

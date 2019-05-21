@@ -11,7 +11,7 @@ namespace Open.Dataflow
 
 		protected TargetBlockFilter(ITargetBlock<T> target)
 		{
-			_target = target;
+			_target = target ?? throw new ArgumentNullException(nameof(target));
 		}
 
 		public Task Completion => _target.Completion;
