@@ -54,6 +54,7 @@ namespace Open.Threading.Dataflow
             var batchBlock = dataflowBlockOptions == null
                 ? new BatchBlock<T>(batchSize)
                 : new BatchBlock<T>(batchSize, dataflowBlockOptions);
+
             source.LinkToWithCompletion(batchBlock);
             return batchBlock;
         }
@@ -99,16 +100,20 @@ namespace Open.Threading.Dataflow
                 foreach (var entry in source)
                 {
                     if (cancellationToken.IsCancellationRequested
-                        || !target.Post(entry) && !await target.SendAsync(entry))
+                        || !target.Post(entry) && !await target.SendAsync(entry, cancellationToken))
                         break;
 
                     count++;
                 }
+
+                cancellationToken.ThrowIfCancellationRequested();
+
                 return count;
             }
         }
 
-        public static async Task<List<T>> ToListAsync<T>(this IReceivableSourceBlock<T> source)
+        public static async Task<List<T>> ToListAsync<T>(this IReceivableSourceBlock<T> source,
+            CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new NullReferenceException();           
@@ -117,12 +122,16 @@ namespace Open.Threading.Dataflow
             var result = new List<T>();
             do
             {
-                while (source.TryReceive(null, out var e))
+                while (!cancellationToken.IsCancellationRequested
+                    && source.TryReceive(null, out var e))
                 {
                     result.Add(e);
                 }
             }
-            while (await source.OutputAvailableAsync());
+            while (!cancellationToken.IsCancellationRequested
+                && await source.OutputAvailableAsync(cancellationToken));
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             return result;
         }
@@ -163,7 +172,8 @@ namespace Open.Threading.Dataflow
 
         public static async Task<int> AllLinesTo(this TextReader source,
             ITargetBlock<string> target,
-            bool completeAndWait = false)
+            bool completeAndAwait = false,
+            CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new NullReferenceException();
@@ -171,15 +181,18 @@ namespace Open.Threading.Dataflow
 
             var count = 0;
             string line;
-            while ((line = await source.ReadLineAsync()) != null)
+            while (!cancellationToken.IsCancellationRequested
+                && (line = await source.ReadLineAsync()) != null)
             {
-                if (!target.Post(line) && !await target.SendAsync(line))
+                if (!target.Post(line) && !await target.SendAsync(line, cancellationToken))
                     break;
 
                 count++;
             }
 
-            if (completeAndWait)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (completeAndAwait)
                 await target.CompleteAsync();
 
             return count;
@@ -188,7 +201,8 @@ namespace Open.Threading.Dataflow
         public static async Task<int> AllLinesTo<T>(this TextReader source,
             ITargetBlock<T> target,
             Func<string, T> transform,
-            bool completeAndWait = false)
+            bool completeAndAwait = false,
+            CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new NullReferenceException();
@@ -196,16 +210,19 @@ namespace Open.Threading.Dataflow
 
             var count = 0;
             string line;
-            while ((line = await source.ReadLineAsync()) != null)
+            while (!cancellationToken.IsCancellationRequested
+                && (line = await source.ReadLineAsync()) != null)
             {
                 var e = transform(line);
-                if (!target.Post(e) && !await target.SendAsync(e))
+                if (!target.Post(e) && !await target.SendAsync(e, cancellationToken))
                     break;
 
                 count++;
             }
 
-            if (completeAndWait)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (completeAndAwait)
                 await target.CompleteAsync();
 
             return count;
