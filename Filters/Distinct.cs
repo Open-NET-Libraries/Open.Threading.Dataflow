@@ -5,32 +5,26 @@ namespace Open.Threading.Dataflow
 {
 	internal class DistinctFilter<T> : TargetBlockFilter<T>
 	{
-		private readonly DataflowMessageStatus _defaultResponseForDuplicate;
-
-		private readonly HashSet<T> _set = new HashSet<T>();
-
-		public DistinctFilter(DataflowMessageStatus defaultResponseForDuplicate, ITargetBlock<T> target) : base(target)
+		public DistinctFilter(ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
+            : base(target, defaultResponseForDuplicate, null)
 		{
-			_defaultResponseForDuplicate = defaultResponseForDuplicate;
 		}
 
-		// The key here is to reject the message ahead of time.
-		public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
+        private readonly HashSet<T> _set = new HashSet<T>();
+
+        protected override bool Accept(T messageValue)
 		{
 			bool didntHave;
-			lock (_target) // Assure order of acceptance.
+			lock (Target) // Assure order of acceptance.
 				didntHave = _set.Add(messageValue);
-			if (didntHave)
-				return _target.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
-
-			return _defaultResponseForDuplicate;
+            return didntHave;
 		}
 	}
 
     public static partial class DataFlowExtensions
     {
         public static ITargetBlock<T> Distinct<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
-            => new DistinctFilter<T>(defaultResponseForDuplicate, target);
+            => new DistinctFilter<T>(target, defaultResponseForDuplicate);
     }
 
 }

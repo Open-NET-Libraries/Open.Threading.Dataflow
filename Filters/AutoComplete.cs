@@ -1,10 +1,9 @@
-﻿using Open.Threading;
-using System.Threading.Tasks.Dataflow;
+﻿using System.Threading.Tasks.Dataflow;
 
 namespace Open.Threading.Dataflow
 {
 
-	internal class AutoCompleteFilter<T> : TargetBlockFilter<T>
+    internal class AutoCompleteFilter<T> : TargetBlockFilterBase<T>
 	{
 		public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target)
 		{
@@ -12,26 +11,26 @@ namespace Open.Threading.Dataflow
 		}
 
 		public int Limit { get; }
-		public int AllowedCount { get; private set; }
+        public int AllowedCount { get; private set; }
 
 
-		// The key here is to reject the message ahead of time.
-		public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
+        // The key here is to reject the message ahead of time.
+        public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
 		{
 			var result = DataflowMessageStatus.DecliningPermanently;
 			var completed = false;
-			// There are multiple operations happening here that require synchronization to get right.
-			ThreadSafety.LockConditional(_target,
+            // There are multiple operations happening here that require synchronization to get right.
+            ThreadSafety.LockConditional(Target,
 				() => AllowedCount < Limit,
 				() =>
 				{
-					AllowedCount++;
-					result = _target.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+                    AllowedCount++;
+					result = Target.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
 					completed = AllowedCount == Limit;
 				}
 			);
 
-			if (completed) _target.Complete();
+			if (completed) Target.Complete();
 
 			return result;
 		}
