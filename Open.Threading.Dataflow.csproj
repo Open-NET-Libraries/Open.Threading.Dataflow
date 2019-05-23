@@ -15,10 +15,11 @@ Part of the "Open" set of libraries.</Description>
     <RepositoryUrl>https://github.com/electricessence/Open.Threading.Dataflow/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>dotnet, dotnet-core, dotnetcore, cs, dataflow, tpl, extensions</PackageTags>
-    <Version>2.2.1</Version>
-    <PackageReleaseNotes>Cleanup of filters with and added .Filter extension for ITargetBlock&lt;T&gt;.</PackageReleaseNotes>
-    <AssemblyVersion>2.2.1.0</AssemblyVersion>
-    <FileVersion>2.2.1.0</FileVersion>
+    <Version>2.2.2</Version>
+    <PackageReleaseNotes>Cleanup of filters with and added .Filter extension for ITargetBlock&lt;T&gt;.
+Better drop handing using a NullTarget.</PackageReleaseNotes>
+    <AssemblyVersion>2.2.2.0</AssemblyVersion>
+    <FileVersion>2.2.2.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 

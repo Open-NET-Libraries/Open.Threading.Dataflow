@@ -4,28 +4,49 @@ using System.Threading.Tasks.Dataflow;
 namespace Open.Threading.Dataflow
 {
     internal class TargetBlockFilter<T> : TargetBlockFilterBase<T>
-	{
+    {
         private readonly DataflowMessageStatus _filterDeclineStatus;
         private readonly Func<T, bool> _filter;
 
         public TargetBlockFilter(
             ITargetBlock<T> target,
             DataflowMessageStatus filterDeclineStatus,
-            Func<T, bool> filter) :base(target)
-		{
+            Func<T, bool> filter) : base(target)
+        {
             _filter = filter;
+            switch (filterDeclineStatus)
+            {
+                case DataflowMessageStatus.Postponed:
+                case DataflowMessageStatus.NotAvailable:
+                    throw new ArgumentException("Block filter does not support: " + Enum.GetName(typeof(DataflowMessageStatus), filterDeclineStatus));
+
+            }
+
             _filterDeclineStatus = filterDeclineStatus;
+
         }
+
+        private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
 
         protected virtual bool Accept(T messageValue)
             => _filter(messageValue);
 
         public override DataflowMessageStatus OfferMessage(
             DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
-            => Accepting && !Accept(messageValue)
-                ? _filterDeclineStatus
-                : base.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+        {
+            if (!Accepting)
+                return DataflowMessageStatus.DecliningPermanently;
+
+            if (Accept(messageValue))
+                return base.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+
+            if (_filterDeclineStatus == DataflowMessageStatus.Accepted)
+                return NullTarget.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+
+            return _filterDeclineStatus;
+        }
     }
+
 
     public static partial class DataFlowExtensions
     {
