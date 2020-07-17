@@ -6,12 +6,12 @@ namespace Open.Threading.Dataflow
 	internal class TargetBlockFilter<T> : TargetBlockFilterBase<T>
 	{
 		private readonly DataflowMessageStatus _filterDeclineStatus;
-		private readonly Func<T, bool> _filter;
+		private readonly Func<T, bool>? _filter;
 
 		public TargetBlockFilter(
 			ITargetBlock<T> target,
 			DataflowMessageStatus filterDeclineStatus,
-			Func<T, bool> filter) : base(target)
+			Func<T, bool>? filter) : base(target)
 		{
 			_filter = filter;
 			switch (filterDeclineStatus)
@@ -29,7 +29,7 @@ namespace Open.Threading.Dataflow
 		private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
 
 		protected virtual bool Accept(T messageValue)
-			=> _filter(messageValue);
+			=> _filter!(messageValue);
 
 		public override DataflowMessageStatus OfferMessage(
 			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)

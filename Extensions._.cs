@@ -17,26 +17,26 @@ namespace Open.Threading.Dataflow
 			return source.Completion;
 		}
 
-		public static ISourceBlock<T> Buffer<T>(this ISourceBlock<T> source, DataflowBlockOptions dataflowBlockOptions = null)
+		public static ISourceBlock<T> Buffer<T>(this ISourceBlock<T> source, DataflowBlockOptions? dataflowBlockOptions = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
-			var output = dataflowBlockOptions == null
+			var output = dataflowBlockOptions is null
 				? new BufferBlock<T>()
 				: new BufferBlock<T>(dataflowBlockOptions);
 			source.LinkToWithCompletion(output);
 			return output;
 		}
 
-		public static ISourceBlock<T> BufferMany<T>(this ISourceBlock<T[]> source, ExecutionDataflowBlockOptions dataflowBlockOptions = null)
+		public static ISourceBlock<T> BufferMany<T>(this ISourceBlock<T[]> source, ExecutionDataflowBlockOptions? dataflowBlockOptions = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
-			var output = dataflowBlockOptions == null
+			var output = dataflowBlockOptions is null
 				? new TransformManyBlock<T[], T>(t => t)
 				: new TransformManyBlock<T[], T>(t => t, dataflowBlockOptions); ;
 			source.LinkToWithCompletion(output);
@@ -45,13 +45,13 @@ namespace Open.Threading.Dataflow
 
 		public static ISourceBlock<T[]> Batch<T>(this ISourceBlock<T> source,
 			int batchSize,
-			GroupingDataflowBlockOptions dataflowBlockOptions = null)
+			GroupingDataflowBlockOptions? dataflowBlockOptions = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
-			var batchBlock = dataflowBlockOptions == null
+			var batchBlock = dataflowBlockOptions is null
 				? new BatchBlock<T>(batchSize)
 				: new BatchBlock<T>(batchSize, dataflowBlockOptions);
 
@@ -62,9 +62,9 @@ namespace Open.Threading.Dataflow
 		public static int ToTargetBlock<T>(this IEnumerable<T> source,
 			ITargetBlock<T> target)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (target == null)
+			if (target is null)
 				throw new ArgumentNullException(nameof(target));
 			Contract.EndContractBlock();
 
@@ -83,9 +83,9 @@ namespace Open.Threading.Dataflow
 			ITargetBlock<T> target,
 			CancellationToken cancellationToken = default)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (target == null)
+			if (target is null)
 				throw new ArgumentNullException(nameof(target));
 			Contract.EndContractBlock();
 
@@ -115,7 +115,7 @@ namespace Open.Threading.Dataflow
 		public static async Task<List<T>> ToListAsync<T>(this IReceivableSourceBlock<T> source,
 			CancellationToken cancellationToken = default)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
@@ -140,7 +140,7 @@ namespace Open.Threading.Dataflow
 			int capacity = DataflowBlockOptions.Unbounded,
 			CancellationToken cancellationToken = default)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
@@ -175,7 +175,7 @@ namespace Open.Threading.Dataflow
 			bool completeAndAwait = false,
 			CancellationToken cancellationToken = default)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 
@@ -204,7 +204,7 @@ namespace Open.Threading.Dataflow
 			bool completeAndAwait = false,
 			CancellationToken cancellationToken = default)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
 			Contract.EndContractBlock();
 

@@ -20,9 +20,9 @@ namespace Open.Threading.Dataflow
 			TBlock target)
 			where TBlock : ITargetBlock<T>
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (target == null)
+			if (target is null)
 				throw new ArgumentNullException(nameof(target));
 			Contract.EndContractBlock();
 
@@ -40,11 +40,11 @@ namespace Open.Threading.Dataflow
 		/// <param name="options">Optional execution options.</param>
 		/// <returns>The source block created.</returns>
 		public static IReceivableSourceBlock<TOut> Pipe<TIn, TOut>(this ISourceBlock<TIn> source,
-			Func<TIn, TOut> transform, ExecutionDataflowBlockOptions options = null)
+			Func<TIn, TOut> transform, ExecutionDataflowBlockOptions? options = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (transform == null)
+			if (transform is null)
 				throw new ArgumentNullException(nameof(transform));
 			Contract.EndContractBlock();
 
@@ -62,11 +62,11 @@ namespace Open.Threading.Dataflow
 		/// <param name="options">Optional execution options.</param>
 		/// <returns>The source block created.</returns>
 		public static IReceivableSourceBlock<TOut> PipeAsync<TIn, TOut>(this ISourceBlock<TIn> source,
-			Func<TIn, Task<TOut>> transform, ExecutionDataflowBlockOptions options = null)
+			Func<TIn, Task<TOut>> transform, ExecutionDataflowBlockOptions? options = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (transform == null)
+			if (transform is null)
 				throw new ArgumentNullException(nameof(transform));
 			Contract.EndContractBlock();
 
@@ -85,15 +85,15 @@ namespace Open.Threading.Dataflow
 		/// <returns>The ActionBlock created.</returns>
 		public static ActionBlock<T> Pipe<T>(this ISourceBlock<T> source,
 			Action<T> handler,
-			ExecutionDataflowBlockOptions options = null)
+			ExecutionDataflowBlockOptions? options = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (handler == null)
+			if (handler is null)
 				throw new ArgumentNullException(nameof(handler));
 			Contract.EndContractBlock();
 
-			var receiver = options == null
+			var receiver = options is null
 				? new ActionBlock<T>(handler)
 				: new ActionBlock<T>(handler, options);
 
@@ -111,15 +111,15 @@ namespace Open.Threading.Dataflow
 		/// <returns>The ActionBlock created.</returns>
 		public static ActionBlock<T> PipeAsync<T>(this ISourceBlock<T> source,
 			Func<T, Task> handler,
-			ExecutionDataflowBlockOptions options = null)
+			ExecutionDataflowBlockOptions? options = null)
 		{
-			if (source == null)
+			if (source is null)
 				throw new NullReferenceException();
-			if (handler == null)
+			if (handler is null)
 				throw new ArgumentNullException(nameof(handler));
 			Contract.EndContractBlock();
 
-			var receiver = options == null
+			var receiver = options is null
 				? new ActionBlock<T>(handler)
 				: new ActionBlock<T>(handler, options);
 

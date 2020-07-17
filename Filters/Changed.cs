@@ -10,12 +10,12 @@ namespace Open.Threading.Dataflow
 		}
 
 		readonly object SyncLock = new object();
-		T _last;
+		T _last = default!;
 
 		protected override bool Accept(T messageValue)
 			=> ThreadSafety.LockConditional(
 				SyncLock,
-				() => !messageValue.Equals(_last),
+				() => !(messageValue is null ? _last is null : messageValue.Equals(_last)),
 				() => _last = messageValue);
 	}
 
