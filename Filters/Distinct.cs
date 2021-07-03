@@ -10,7 +10,7 @@ namespace Open.Threading.Dataflow
 		{
 		}
 
-		private readonly HashSet<T> _set = new HashSet<T>();
+		private readonly HashSet<T> _set = new();
 
 		protected override bool Accept(T messageValue)
 		{

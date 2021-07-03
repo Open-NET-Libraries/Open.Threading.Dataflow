@@ -9,7 +9,7 @@ namespace Open.Threading.Dataflow
 		{
 		}
 
-		readonly object SyncLock = new object();
+		readonly object SyncLock = new();
 		T _last = default!;
 
 		protected override bool Accept(T messageValue)
