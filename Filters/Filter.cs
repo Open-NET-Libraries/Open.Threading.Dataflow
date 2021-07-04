@@ -32,7 +32,7 @@ namespace Open.Threading.Dataflow
 			=> _filter!(messageValue);
 
 		public override DataflowMessageStatus OfferMessage(
-			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
+			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
 		{
 			if (!Accepting)
 				return DataflowMessageStatus.DecliningPermanently;

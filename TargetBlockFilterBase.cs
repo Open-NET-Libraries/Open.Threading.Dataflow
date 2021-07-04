@@ -42,7 +42,7 @@ namespace Open.Threading.Dataflow
 
 		// The key here is to reject the message ahead of time.
 		public virtual DataflowMessageStatus OfferMessage(
-			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
+			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
 			=> Accepting
 				? Target.OfferMessage(messageHeader, messageValue, source, consumeToAccept)
 				: DataflowMessageStatus.DecliningPermanently;

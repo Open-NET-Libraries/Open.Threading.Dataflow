@@ -15,7 +15,7 @@ namespace Open.Threading.Dataflow
 
 
 		// The key here is to reject the message ahead of time.
-		public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T> source, bool consumeToAccept)
+		public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
 		{
 			var result = DataflowMessageStatus.DecliningPermanently;
 			var completed = false;
