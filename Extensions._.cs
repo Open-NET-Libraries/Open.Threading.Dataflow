@@ -182,7 +182,7 @@ namespace Open.Threading.Dataflow
 			var count = 0;
 			string line;
 			while (!cancellationToken.IsCancellationRequested
-				&& (line = await source.ReadLineAsync()) != null)
+				&& (line = await source.ReadLineAsync()) is not null)
 			{
 				if (!target.Post(line) && !await target.SendAsync(line, cancellationToken))
 					break;
@@ -211,7 +211,7 @@ namespace Open.Threading.Dataflow
 			var count = 0;
 			string line;
 			while (!cancellationToken.IsCancellationRequested
-				&& (line = await source.ReadLineAsync()) != null)
+				&& (line = await source.ReadLineAsync()) is not null)
 			{
 				var e = transform(line);
 				if (!target.Post(e) && !await target.SendAsync(e, cancellationToken))
@@ -256,11 +256,8 @@ namespace Open.Threading.Dataflow
 			return source;
 		}
 
-		public static void Fault(this IDataflowBlock target, string message)
-			=> target.Fault(new Exception(message));
+		public static void Fault(this IDataflowBlock target, string message) => target.Fault(new Exception(message));
 
-		public static void Fault(this IDataflowBlock target, string message, Exception innerException)
-			=> target.Fault(new Exception(message, innerException));
-
+		public static void Fault(this IDataflowBlock target, string message, Exception innerException) => target.Fault(new Exception(message, innerException));
 	}
 }

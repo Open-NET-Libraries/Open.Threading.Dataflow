@@ -9,10 +9,7 @@ namespace Open.Threading.Dataflow
 	{
 		protected readonly ITargetBlock<T> Target;
 
-		protected TargetBlockFilterBase(ITargetBlock<T> target)
-		{
-			Target = target ?? throw new ArgumentNullException(nameof(target));
-		}
+		protected TargetBlockFilterBase(ITargetBlock<T> target) => Target = target ?? throw new ArgumentNullException(nameof(target));
 
 		protected int _state;
 		const int ACCEPTING = 0;
@@ -42,9 +39,8 @@ namespace Open.Threading.Dataflow
 
 		// The key here is to reject the message ahead of time.
 		public virtual DataflowMessageStatus OfferMessage(
-			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
-			=> Accepting
-				? Target.OfferMessage(messageHeader, messageValue, source, consumeToAccept)
-				: DataflowMessageStatus.DecliningPermanently;
+			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept) => Accepting
+						   ? Target.OfferMessage(messageHeader, messageValue, source, consumeToAccept)
+						   : DataflowMessageStatus.DecliningPermanently;
 	}
 }

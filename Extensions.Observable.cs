@@ -9,8 +9,7 @@ namespace Open.Threading.Dataflow
 			public static IObserver<T> New(
 				Action<T>? onNext,
 				Action<Exception>? onError,
-				Action? onCompleted)
-				=> new Observer<T>()
+				Action? onCompleted) => new Observer<T>()
 				{
 					_onNext = onNext,
 					_onError = onError,
@@ -28,7 +27,6 @@ namespace Open.Threading.Dataflow
 
 			public void OnCompleted() => _onCompleted?.Invoke();
 
-
 			public void Dispose()
 			{
 				_onNext = null;
@@ -40,13 +38,10 @@ namespace Open.Threading.Dataflow
 		public static IDisposable Subscribe<T>(this IObservable<T> observable,
 			Action<T> onNext,
 			Action<Exception> onError,
-			Action? onCompleted = null)
-			=> observable.Subscribe(Observer<T>.New(onNext, onError, onCompleted));
+			Action? onCompleted = null) => observable.Subscribe(Observer<T>.New(onNext, onError, onCompleted));
 
 		public static IDisposable Subscribe<T>(this IObservable<T> observable,
 			Action<T> onNext,
-			Action? onCompleted = null)
-			=> observable.Subscribe(Observer<T>.New(onNext, null, onCompleted));
-
+			Action? onCompleted = null) => observable.Subscribe(Observer<T>.New(onNext, null, onCompleted));
 	}
 }

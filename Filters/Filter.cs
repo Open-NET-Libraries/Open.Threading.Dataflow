@@ -28,8 +28,7 @@ namespace Open.Threading.Dataflow
 
 		private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
 
-		protected virtual bool Accept(T messageValue)
-			=> _filter!(messageValue);
+		protected virtual bool Accept(T messageValue) => _filter!(messageValue);
 
 		public override DataflowMessageStatus OfferMessage(
 			DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
@@ -62,11 +61,10 @@ namespace Open.Threading.Dataflow
 		/// <returns>A filter block that preceeds the target..</returns>
 		public static ITargetBlock<T> Filter<T>(this ITargetBlock<T> target,
 			Func<T, bool> filter,
-			bool decline = false)
-			=> new TargetBlockFilter<T>(
-				target,
-				decline ? DataflowMessageStatus.Declined : DataflowMessageStatus.Accepted,
-				filter);
+			bool decline = false) => new TargetBlockFilter<T>(
+						   target,
+						   decline ? DataflowMessageStatus.Declined : DataflowMessageStatus.Accepted,
+						   filter);
 
 
 		/// <summary>

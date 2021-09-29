@@ -139,8 +139,7 @@ namespace Open.Threading.Dataflow
 		public static ActionBlock<T> PipeConcurrently<T>(this ISourceBlock<T> source,
 			int maxConcurrency,
 			Action<T> handler,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(handler, new ExecutionDataflowBlockOptions
 			{
 				MaxDegreeOfParallelism = maxConcurrency,
 				SingleProducerConstrained = true,
@@ -159,8 +158,7 @@ namespace Open.Threading.Dataflow
 		public static ActionBlock<T> PipeConcurrentlyAsync<T>(this ISourceBlock<T> source,
 			int maxConcurrency,
 			Func<T, Task> handler,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(handler, new ExecutionDataflowBlockOptions
 			{
 				MaxDegreeOfParallelism = maxConcurrency,
 				SingleProducerConstrained = true,
@@ -180,8 +178,7 @@ namespace Open.Threading.Dataflow
 		public static IReceivableSourceBlock<TOut> PipeConcurrently<TIn, TOut>(this ISourceBlock<TIn> source,
 			int maxConcurrency,
 			Func<TIn, TOut> transform,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(transform, new ExecutionDataflowBlockOptions
 			{
 				MaxDegreeOfParallelism = maxConcurrency,
 				SingleProducerConstrained = true,
@@ -201,8 +198,7 @@ namespace Open.Threading.Dataflow
 		public static IReceivableSourceBlock<TOut> PipeConcurrentlyAsync<TIn, TOut>(this ISourceBlock<TIn> source,
 			int maxConcurrency,
 			Func<TIn, Task<TOut>> transform,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(transform, new ExecutionDataflowBlockOptions
 			{
 				MaxDegreeOfParallelism = maxConcurrency,
 				SingleProducerConstrained = true,
@@ -223,8 +219,7 @@ namespace Open.Threading.Dataflow
 			int capacity,
 			int maxConcurrency,
 			Action<T> handler,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(handler, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				MaxDegreeOfParallelism = maxConcurrency,
@@ -246,8 +241,7 @@ namespace Open.Threading.Dataflow
 			int capacity,
 			int maxConcurrency,
 			Func<T, Task> handler,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(handler, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				MaxDegreeOfParallelism = maxConcurrency,
@@ -270,8 +264,7 @@ namespace Open.Threading.Dataflow
 			int capacity,
 			int maxConcurrency,
 			Func<TIn, TOut> transform,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(transform, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				MaxDegreeOfParallelism = maxConcurrency,
@@ -295,8 +288,7 @@ namespace Open.Threading.Dataflow
 			int capacity,
 			int maxConcurrency,
 			Func<TIn, Task<TOut>> transform,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(transform, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				MaxDegreeOfParallelism = maxConcurrency,
@@ -316,8 +308,7 @@ namespace Open.Threading.Dataflow
 		public static ActionBlock<T> PipeLimited<T>(this ISourceBlock<T> source,
 			int capacity,
 			Action<T> handler,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(handler, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				SingleProducerConstrained = true,
@@ -336,8 +327,7 @@ namespace Open.Threading.Dataflow
 		public static ActionBlock<T> PipeLimitedAsync<T>(this ISourceBlock<T> source,
 			int capacity,
 			Func<T, Task> handler,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(handler, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(handler, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				SingleProducerConstrained = true,
@@ -357,8 +347,7 @@ namespace Open.Threading.Dataflow
 		public static IReceivableSourceBlock<TOut> PipeLimited<TIn, TOut>(this ISourceBlock<TIn> source,
 			int capacity,
 			Func<TIn, TOut> transform,
-			CancellationToken cancellationToken = default)
-			=> source.Pipe(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.Pipe(transform, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				SingleProducerConstrained = true,
@@ -378,8 +367,7 @@ namespace Open.Threading.Dataflow
 		public static IReceivableSourceBlock<TOut> PipeLimitedAsync<TIn, TOut>(this ISourceBlock<TIn> source,
 			int capacity,
 			Func<TIn, Task<TOut>> transform,
-			CancellationToken cancellationToken = default)
-			=> source.PipeAsync(transform, new ExecutionDataflowBlockOptions
+			CancellationToken cancellationToken = default) => source.PipeAsync(transform, new ExecutionDataflowBlockOptions
 			{
 				BoundedCapacity = capacity,
 				SingleProducerConstrained = true,

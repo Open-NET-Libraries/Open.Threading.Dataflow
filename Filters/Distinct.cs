@@ -23,8 +23,7 @@ namespace Open.Threading.Dataflow
 
 	public static partial class DataFlowExtensions
 	{
-		public static ITargetBlock<T> Distinct<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
-			=> new DistinctFilter<T>(target, defaultResponseForDuplicate);
+		public static ITargetBlock<T> Distinct<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate) => new DistinctFilter<T>(target, defaultResponseForDuplicate);
 	}
 
 }

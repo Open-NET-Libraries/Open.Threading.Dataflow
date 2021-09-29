@@ -12,16 +12,14 @@ namespace Open.Threading.Dataflow
 		readonly object SyncLock = new();
 		T _last = default!;
 
-		protected override bool Accept(T messageValue)
-			=> ThreadSafety.LockConditional(
-				SyncLock,
-				() => !(messageValue is null ? _last is null : messageValue.Equals(_last)),
-				() => _last = messageValue);
+		protected override bool Accept(T messageValue) => ThreadSafety.LockConditional(
+						   SyncLock,
+						   () => !(messageValue is null ? _last is null : messageValue.Equals(_last)),
+						   () => _last = messageValue);
 	}
 
 	public static partial class DataFlowExtensions
 	{
-		public static ITargetBlock<T> OnlyIfChanged<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate)
-			=> new ChangedFilter<T>(target, defaultResponseForDuplicate);
+		public static ITargetBlock<T> OnlyIfChanged<T>(this ITargetBlock<T> target, DataflowMessageStatus defaultResponseForDuplicate) => new ChangedFilter<T>(target, defaultResponseForDuplicate);
 	}
 }
