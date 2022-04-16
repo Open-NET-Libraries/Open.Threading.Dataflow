@@ -9,8 +9,7 @@ public static partial class DataFlowExtensions
 		public static IObserver<T> New(
 			Action<T>? onNext,
 			Action<Exception>? onError,
-			Action? onCompleted)
-			=> new Observer<T>()
+			Action? onCompleted) => new Observer<T>()
 			{
 				_onNext = onNext,
 				_onError = onError,
@@ -38,11 +37,9 @@ public static partial class DataFlowExtensions
 	public static IDisposable Subscribe<T>(this IObservable<T> observable,
 		Action<T> onNext,
 		Action<Exception> onError,
-		Action? onCompleted = null)
-		=> observable.Subscribe(Observer<T>.New(onNext, onError, onCompleted));
+		Action? onCompleted = null) => observable.Subscribe(Observer<T>.New(onNext, onError, onCompleted));
 
 	public static IDisposable Subscribe<T>(this IObservable<T> observable,
 		Action<T> onNext,
-		Action? onCompleted = null)
-		=> observable.Subscribe(Observer<T>.New(onNext, null, onCompleted));
+		Action? onCompleted = null) => observable.Subscribe(Observer<T>.New(onNext, null, onCompleted));
 }

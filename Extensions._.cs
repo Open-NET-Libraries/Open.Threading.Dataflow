@@ -26,7 +26,6 @@ public static partial class DataFlowExtensions
 		var output = dataflowBlockOptions is null
 			? new BufferBlock<T>()
 			: new BufferBlock<T>(dataflowBlockOptions);
-
 		_ = source.LinkToWithCompletion(output);
 		return output;
 	}
@@ -40,7 +39,6 @@ public static partial class DataFlowExtensions
 		var output = dataflowBlockOptions is null
 			? new TransformManyBlock<T[], T>(t => t)
 			: new TransformManyBlock<T[], T>(t => t, dataflowBlockOptions);
-
 		_ = source.LinkToWithCompletion(output);
 		return output;
 	}
@@ -186,7 +184,7 @@ public static partial class DataFlowExtensions
 		var count = 0;
 		string line;
 		while (!cancellationToken.IsCancellationRequested
-			&& (line = await source.ReadLineAsync()) != null)
+			&& (line = await source.ReadLineAsync()) is not null)
 		{
 			if (!target.Post(line) && !await target.SendAsync(line, cancellationToken))
 				break;
@@ -215,7 +213,7 @@ public static partial class DataFlowExtensions
 		var count = 0;
 		string line;
 		while (!cancellationToken.IsCancellationRequested
-			&& (line = await source.ReadLineAsync()) != null)
+			&& (line = await source.ReadLineAsync()) is not null)
 		{
 			var e = transform(line);
 			if (!target.Post(e) && !await target.SendAsync(e, cancellationToken))

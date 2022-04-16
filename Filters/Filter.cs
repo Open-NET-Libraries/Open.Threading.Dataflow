@@ -26,20 +26,23 @@ internal class TargetBlockFilter<T> : TargetBlockFilterBase<T>
 
 	private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
 
-	protected virtual bool Accept(T messageValue)
-		=> _filter!(messageValue);
+	protected virtual bool Accept(T messageValue) => _filter!(messageValue);
 
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression")]
 	public override DataflowMessageStatus OfferMessage(
 		DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
-		=> !Accepting
-			? DataflowMessageStatus.DecliningPermanently
-			: Accept(messageValue)
-			? base.OfferMessage(messageHeader, messageValue, source, consumeToAccept)
-			: _filterDeclineStatus switch
-			{
-				DataflowMessageStatus.Accepted => NullTarget.OfferMessage(messageHeader, messageValue, source, consumeToAccept),
-				_ => _filterDeclineStatus
-			};
+	{
+		if (!Accepting)
+			return DataflowMessageStatus.DecliningPermanently;
+
+		if (Accept(messageValue))
+			return base.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+
+		if (_filterDeclineStatus == DataflowMessageStatus.Accepted)
+			return NullTarget.OfferMessage(messageHeader, messageValue, source, consumeToAccept);
+
+		return _filterDeclineStatus;
+	}
 }
 
 public static partial class DataFlowExtensions
@@ -56,11 +59,10 @@ public static partial class DataFlowExtensions
 	/// <returns>A filter block that preceeds the target..</returns>
 	public static ITargetBlock<T> Filter<T>(this ITargetBlock<T> target,
 		Func<T, bool> filter,
-		bool decline = false)
-		=> new TargetBlockFilter<T>(
-			target,
-			decline ? DataflowMessageStatus.Declined : DataflowMessageStatus.Accepted,
-			filter);
+		bool decline = false) => new TargetBlockFilter<T>(
+					   target,
+					   decline ? DataflowMessageStatus.Declined : DataflowMessageStatus.Accepted,
+					   filter);
 
 	/// <summary>
 	/// Processes an item through an acceptor function.

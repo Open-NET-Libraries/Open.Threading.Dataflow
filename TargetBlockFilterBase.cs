@@ -10,9 +10,7 @@ internal abstract class TargetBlockFilterBase<T> : ITargetBlock<T>
 	protected readonly ITargetBlock<T> Target;
 
 	protected TargetBlockFilterBase(ITargetBlock<T> target)
-	{
-		Target = target ?? throw new ArgumentNullException(nameof(target));
-	}
+		=> Target = target ?? throw new ArgumentNullException(nameof(target));
 
 	protected int _state;
 	const int ACCEPTING = 0;

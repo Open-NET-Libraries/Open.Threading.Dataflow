@@ -4,10 +4,7 @@ namespace Open.Threading.Dataflow;
 
 internal class AutoCompleteFilter<T> : TargetBlockFilterBase<T>
 {
-	public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target)
-	{
-		Limit = limit;
-	}
+	public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target) => Limit = limit;
 
 	public int Limit { get; }
 	public int AllowedCount { get; private set; }
@@ -36,6 +33,5 @@ internal class AutoCompleteFilter<T> : TargetBlockFilterBase<T>
 
 public static partial class DataFlowExtensions
 {
-	public static ITargetBlock<T> AutoCompleteAfter<T>(this ITargetBlock<T> target, int limit)
-		=> new AutoCompleteFilter<T>(limit, target);
+	public static ITargetBlock<T> AutoCompleteAfter<T>(this ITargetBlock<T> target, int limit) => new AutoCompleteFilter<T>(limit, target);
 }
