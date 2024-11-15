@@ -2,20 +2,20 @@
 
 namespace Open.Threading.Dataflow;
 
-internal class AutoCompleteFilter<T> : TargetBlockFilterBase<T>
+internal class AutoCompleteFilter<T>(int limit, ITargetBlock<T> target)
+	: TargetBlockFilterBase<T>(target)
 {
-	public AutoCompleteFilter(int limit, ITargetBlock<T> target) : base(target) => Limit = limit;
+    public int Limit { get; } = limit;
+    public int AllowedCount { get; private set; }
 
-	public int Limit { get; }
-	public int AllowedCount { get; private set; }
-
-	// The key here is to reject the message ahead of time.
-	public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
+    // The key here is to reject the message ahead of time.
+    public override DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, T messageValue, ISourceBlock<T>? source, bool consumeToAccept)
 	{
 		var result = DataflowMessageStatus.DecliningPermanently;
 		var completed = false;
 		// There are multiple operations happening here that require synchronization to get right.
-		_ = ThreadSafety.LockConditional(Target,
+		_ = ThreadSafety.LockConditional(
+			SyncLock,
 			() => AllowedCount < Limit,
 			() =>
 			{

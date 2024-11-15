@@ -6,10 +6,10 @@ public static partial class DataFlowExtensions
 {
 	class Observer<T> : IObserver<T>, IDisposable
 	{
-		public static IObserver<T> New(
+		public static Observer<T> New(
 			Action<T>? onNext,
 			Action<Exception>? onError,
-			Action? onCompleted) => new Observer<T>()
+			Action? onCompleted) => new()
 			{
 				_onNext = onNext,
 				_onError = onError,

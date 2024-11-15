@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks.Dataflow;
 
 namespace Open.Threading.Dataflow;
@@ -18,13 +19,15 @@ internal class TargetBlockFilter<T> : TargetBlockFilterBase<T>
 		{
 			case DataflowMessageStatus.Postponed:
 			case DataflowMessageStatus.NotAvailable:
-				throw new ArgumentException("Block filter does not support: " + Enum.GetName(typeof(DataflowMessageStatus), filterDeclineStatus));
+				throw new ArgumentException(
+					"Block filter does not support: "
+					+ filterDeclineStatus.GetName());
 		}
 
 		_filterDeclineStatus = filterDeclineStatus;
 	}
 
-	private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
+    private static readonly ITargetBlock<T> NullTarget = DataflowBlock.NullTarget<T>();
 
 	protected virtual bool Accept(T messageValue) => _filter!(messageValue);
 
@@ -82,4 +85,15 @@ public static partial class DataFlowExtensions
 		_ = source.LinkToWithCompletion(receiver);
 		return source;
 	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static string GetName<T>(this T filterDeclineStatus)
+		where T : struct, Enum
+    {
+#if NET9_0_OR_GREATER
+		return Enum.GetName(filterDeclineStatus) ?? "Unknown";
+#else
+        return Enum.GetName(typeof(DataflowMessageStatus), filterDeclineStatus) ?? "Unknown";
+#endif
+    }
 }

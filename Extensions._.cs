@@ -99,11 +99,11 @@ public static partial class DataFlowExtensions
 			var count = 0;
 			foreach (var entry in source)
 			{
-				if (cancellationToken.IsCancellationRequested
-					|| !target.Post(entry) && !await target.SendAsync(entry, cancellationToken))
-				{
+				if (cancellationToken.IsCancellationRequested)
 					break;
-				}
+
+				if (!target.Post(entry) && !await target.SendAsync(entry, cancellationToken).ConfigureAwait(false))
+					break;
 
 				count++;
 			}
@@ -131,7 +131,7 @@ public static partial class DataFlowExtensions
 			}
 		}
 		while (!cancellationToken.IsCancellationRequested
-			&& await source.OutputAvailableAsync(cancellationToken));
+			&& await source.OutputAvailableAsync(cancellationToken).ConfigureAwait(false));
 
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -164,7 +164,7 @@ public static partial class DataFlowExtensions
 
 			async Task CallCompleteWhenFinished()
 			{
-				_ = await result;
+				_ = await result.ConfigureAwait(false);
 				buffer.Complete();
 			}
 		}
@@ -172,7 +172,7 @@ public static partial class DataFlowExtensions
 		return buffer;
 	}
 
-	public static async Task<int> AllLinesTo(this TextReader source,
+    public static async Task<int> AllLinesTo(this TextReader source,
 		ITargetBlock<string> target,
 		bool completeAndAwait = false,
 		CancellationToken cancellationToken = default)
@@ -182,11 +182,11 @@ public static partial class DataFlowExtensions
 		Contract.EndContractBlock();
 
 		var count = 0;
-		string line;
+		string? line;
 		while (!cancellationToken.IsCancellationRequested
-			&& (line = await source.ReadLineAsync()) is not null)
+			&& (line = await source.ReadLineAsync().ConfigureAwait(false)) is not null)
 		{
-			if (!target.Post(line) && !await target.SendAsync(line, cancellationToken))
+			if (!target.Post(line) && !await target.SendAsync(line, cancellationToken).ConfigureAwait(false))
 				break;
 
 			count++;
@@ -195,12 +195,12 @@ public static partial class DataFlowExtensions
 		cancellationToken.ThrowIfCancellationRequested();
 
 		if (completeAndAwait)
-			await target.CompleteAsync();
+			await target.CompleteAsync().ConfigureAwait(false);
 
 		return count;
 	}
 
-	public static async Task<int> AllLinesTo<T>(this TextReader source,
+    public static async Task<int> AllLinesTo<T>(this TextReader source,
 		ITargetBlock<T> target,
 		Func<string, T> transform,
 		bool completeAndAwait = false,
@@ -211,12 +211,12 @@ public static partial class DataFlowExtensions
 		Contract.EndContractBlock();
 
 		var count = 0;
-		string line;
+		string? line;
 		while (!cancellationToken.IsCancellationRequested
-			&& (line = await source.ReadLineAsync()) is not null)
+			&& (line = await source.ReadLineAsync().ConfigureAwait(false)) is not null)
 		{
 			var e = transform(line);
-			if (!target.Post(e) && !await target.SendAsync(e, cancellationToken))
+			if (!target.Post(e) && !await target.SendAsync(e, cancellationToken).ConfigureAwait(false))
 				break;
 
 			count++;
@@ -225,7 +225,7 @@ public static partial class DataFlowExtensions
 		cancellationToken.ThrowIfCancellationRequested();
 
 		if (completeAndAwait)
-			await target.CompleteAsync();
+			await target.CompleteAsync().ConfigureAwait(false);
 
 		return count;
 	}
@@ -254,7 +254,7 @@ public static partial class DataFlowExtensions
 	public static T OnFault<T>(this T source, Action<Exception> onfault)
 		where T : IDataflowBlock
 	{
-		_ = source.Completion.OnFaulted(ex => onfault(ex.InnerException));
+		_ = source.Completion.OnFaulted(ex => onfault(ex.InnerException ?? ex));
 		return source;
 	}
 

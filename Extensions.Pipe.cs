@@ -8,14 +8,14 @@ namespace Open.Threading.Dataflow;
 
 public static partial class DataFlowExtensions
 {
-	/// <summary>
-	/// Pipes the source data to the target.
-	/// </summary>
-	/// <typeparam name="T">The input type.</typeparam>
-	/// <param name="source">The source block to receive from.</param>
-	/// <param name="transform">The target block to post to.</param>
-	/// <returns>The target block.</returns>
-	public static TBlock Pipe<T, TBlock>(this ISourceBlock<T> source,
+    /// <summary>
+    /// Pipes the source data to the target.
+    /// </summary>
+    /// <typeparam name="T">The input type.</typeparam>
+    /// <param name="source">The source block to receive from.</param>
+    /// <param name="target">The target block to post to.</param>
+    /// <returns>The target block.</returns>
+    public static TBlock Pipe<T, TBlock>(this ISourceBlock<T> source,
 		TBlock target)
 		where TBlock : ITargetBlock<T>
 	{
@@ -29,15 +29,16 @@ public static partial class DataFlowExtensions
 		return target;
 	}
 
-	/// <summary>
-	/// Produces a source block that contains transformed results.
-	/// </summary>
-	/// <typeparam name="T">The input type.</typeparam>
-	/// <param name="source">The source block to receive from.</param>
-	/// <param name="transform">The transfrom function to apply.</param>
-	/// <param name="options">Optional execution options.</param>
-	/// <returns>The source block created.</returns>
-	public static IReceivableSourceBlock<TOut> Pipe<TIn, TOut>(this ISourceBlock<TIn> source,
+    /// <summary>
+    /// Produces a source block that contains transformed results.
+    /// </summary>
+    /// <typeparam name="TIn">The input type.</typeparam>
+    /// <typeparam name="TOut">The output type.</typeparam>
+    /// <param name="source">The source block to receive from.</param>
+    /// <param name="transform">The transfrom function to apply.</param>
+    /// <param name="options">Optional execution options.</param>
+    /// <returns>The source block created.</returns>
+    public static IReceivableSourceBlock<TOut> Pipe<TIn, TOut>(this ISourceBlock<TIn> source,
 		Func<TIn, TOut> transform, ExecutionDataflowBlockOptions? options = null)
 	{
 		if (source is null)
@@ -51,15 +52,16 @@ public static partial class DataFlowExtensions
 		return output;
 	}
 
-	/// <summary>
-	/// Produces a source block that contains transformed results.
-	/// </summary>
-	/// <typeparam name="T">The input type.</typeparam>
-	/// <param name="source">The source block to receive from.</param>
-	/// <param name="transform">The transfrom function to apply.</param>
-	/// <param name="options">Optional execution options.</param>
-	/// <returns>The source block created.</returns>
-	public static IReceivableSourceBlock<TOut> PipeAsync<TIn, TOut>(this ISourceBlock<TIn> source,
+    /// <summary>
+    /// Produces a source block that contains transformed results.
+    /// </summary>
+    /// <typeparam name="TIn">The input type.</typeparam>
+    /// <typeparam name="TOut">The output type.</typeparam>
+    /// <param name="source">The source block to receive from.</param>
+    /// <param name="transform">The transfrom function to apply.</param>
+    /// <param name="options">Optional execution options.</param>
+    /// <returns>The source block created.</returns>
+    public static IReceivableSourceBlock<TOut> PipeAsync<TIn, TOut>(this ISourceBlock<TIn> source,
 		Func<TIn, Task<TOut>> transform, ExecutionDataflowBlockOptions? options = null)
 	{
 		if (source is null)
