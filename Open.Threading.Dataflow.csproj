@@ -26,6 +26,7 @@
 		<PackageIcon>logo.png</PackageIcon>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<NoWarn>CA1510;IDE1006;CA2016;</NoWarn>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,6 +44,9 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
-
 </Project>
